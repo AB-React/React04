@@ -1,90 +1,77 @@
-import React, { useState, useEffect } from "react";
+import React, { useReducer } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
 
+const initialState = {
+  email: "",
+  passwd: "",
+  emailIsValid: false,
+  passwordIsValid: false,
+  formIsValid: false,
+};
+
+const reducer = (prevState, action) => {
+  const newState = { ...prevState };
+  if (action.type === "EMAIL_CHANGED") {
+    newState.email = action.payload.email;
+  }
+  if (action.type === "PASSWD_CHANGED") {
+    newState.passwd = action.payload.passwd;
+  }
+  newState.emailIsValid = newState.email.includes("@");
+  newState.passwdIsValid = newState.passwd.trim().length > 6;
+  newState.formIsValid =
+    newState.email.includes("@") && newState.passwd.trim().length > 6;
+  return newState;
+};
+
 const Login = (props) => {
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState("");
-  const [passwordIsValid, setPasswordIsValid] = useState();
-  const [formIsValid, setFormIsValid] = useState(false);
-
-  useEffect(() => {
-    const timerPointer = setTimeout(() => {
-      console.log("validate!");
-      setFormIsValid(
-        enteredEmail.includes("@") && enteredPassword.trim().length > 6
-      );
-    }, 500);
-
-    return () => {
-      console.log("clean up!");
-      clearTimeout(timerPointer);
-    };
-  }, [enteredEmail, enteredPassword]);
-
-  const emailChangeHandler = (event) => {
-    setEnteredEmail(event.target.value);
-  };
-
-  const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
-
-    setFormIsValid(
-      event.target.value.trim().length > 6 && enteredEmail.includes("@")
-    );
-  };
-
-  const validateEmailHandler = () => {
-    setEmailIsValid(enteredEmail.includes("@"));
-  };
-
-  const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
-  };
-
-  const submitHandler = (event) => {
-    event.preventDefault();
-    props.onLogin(enteredEmail, enteredPassword);
-  };
-
+  const [state, dispatch] = useReducer(reducer, initialState);
   return (
     <Card className={classes.login}>
-      <form onSubmit={submitHandler}>
-        <div
-          className={`${classes.control} ${
-            emailIsValid === false ? classes.invalid : ""
-          }`}
-        >
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          props.onLogin(state.email, state.passwd);
+        }}
+      >
+        <div className={`${classes.control} ${""}`}>
           <label htmlFor="email">E-Mail</label>
           <input
             type="email"
             id="email"
-            value={enteredEmail}
-            onChange={emailChangeHandler}
-            onBlur={validateEmailHandler}
+            onChange={(e) => {
+              dispatch({
+                type: "EMAIL_CHANGED",
+                payload: { email: e.target.value },
+              });
+            }}
           />
         </div>
-        <div
-          className={`${classes.control} ${
-            passwordIsValid === false ? classes.invalid : ""
-          }`}
-        >
+        <div className={`${classes.control} ${""}`}>
           <label htmlFor="password">Password</label>
           <input
             type="password"
             id="password"
-            value={enteredPassword}
-            onChange={passwordChangeHandler}
-            onBlur={validatePasswordHandler}
+            onChange={(e) => {
+              dispatch({
+                type: "PASSWD_CHANGED",
+                payload: { passwd: e.target.value },
+              });
+            }}
           />
         </div>
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button
+            disabled={!state.formIsValid}
+            type="submit"
+            className={classes.btn}
+          >
             Login
           </Button>
+          <p>Form: {state.passwd}</p>
         </div>
       </form>
     </Card>
