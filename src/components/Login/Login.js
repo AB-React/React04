@@ -16,14 +16,13 @@ const reducer = (prevState, action) => {
   const newState = { ...prevState };
   if (action.type === "EMAIL_CHANGED") {
     newState.email = action.payload.email;
+    newState.emailIsValid = newState.email.includes("@");
   }
   if (action.type === "PASSWD_CHANGED") {
     newState.passwd = action.payload.passwd;
+    newState.passwdIsValid = newState.passwd.trim().length > 6;
   }
-  newState.emailIsValid = newState.email.includes("@");
-  newState.passwdIsValid = newState.passwd.trim().length > 6;
-  newState.formIsValid =
-    newState.email.includes("@") && newState.passwd.trim().length > 6;
+  newState.formIsValid = newState.emailIsValid && newState.passwdIsValid;
   return newState;
 };
 
