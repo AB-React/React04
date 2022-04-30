@@ -1,5 +1,5 @@
-import React, { useReducer } from "react";
-
+import React from "react";
+import AuthContext from "../../context/auth-context";
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
 import Button from "../UI/Button/Button";
@@ -26,14 +26,15 @@ const reducer = (prevState, action) => {
   return newState;
 };
 
-const Login = (props) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+const Login = () => {
+  const ctx = React.useContext(AuthContext);
+  const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
     <Card className={classes.login}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          props.onLogin(state.email, state.passwd);
+          ctx.loginHandler(state.email, state.passwd);
         }}
       >
         <div className={`${classes.control} ${""}`}>
