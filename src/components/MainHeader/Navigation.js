@@ -18,7 +18,7 @@ const Navigation = () => {
               <a href="/">Admin</a>
             </li>
             <li>
-              <button onClick={ctx.onLogout}>Logout</button>
+              <button onClick={ctx.logoutHandler}>Logout</button>
             </li>
           </>
         )}

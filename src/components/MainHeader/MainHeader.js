@@ -1,5 +1,4 @@
 import React from "react";
-import AuthContext from "../../context/auth-context";
 import Navigation from "./Navigation";
 import classes from "./MainHeader.module.css";
 
