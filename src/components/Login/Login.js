@@ -27,14 +27,14 @@ const reducer = (prevState, action) => {
 };
 
 const Login = () => {
-  const ctx = React.useContext(AuthContext);
+  const authCtx = React.useContext(AuthContext);
   const [state, dispatch] = React.useReducer(reducer, initialState);
   return (
     <Card className={classes.login}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          ctx.loginHandler(state.email, state.passwd);
+          authCtx.loginHandler(state.email, state.passwd);
         }}
       >
         <div className={`${classes.control} ${""}`}>

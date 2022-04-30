@@ -5,11 +5,11 @@ import classes from "./Home.module.css";
 import Button from "../UI/Button/Button";
 
 const Home = () => {
-  const ctx = React.useContext(AuthContext);
+  const authCtx = React.useContext(AuthContext);
   return (
     <Card className={classes.home}>
       <h1>Welcome back!</h1>
-      <Button onClick={ctx.logoutHandler}>Logout</Button>
+      <Button onClick={authCtx.logoutHandler}>Logout</Button>
     </Card>
   );
 };

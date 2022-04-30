@@ -6,13 +6,13 @@ import MainHeader from "./components/MainHeader/MainHeader";
 import AuthContext from "./context/auth-context";
 
 function App() {
-  const ctx = React.useContext(AuthContext);
+  const authCtx = React.useContext(AuthContext);
   return (
     <>
       <MainHeader />
       <main>
-        {!ctx.isLoggedIn && <Login />}
-        {ctx.isLoggedIn && <Home />}
+        {!authCtx.isLoggedIn && <Login />}
+        {authCtx.isLoggedIn && <Home />}
       </main>
     </>
   );
